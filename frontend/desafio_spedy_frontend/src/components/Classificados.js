@@ -32,7 +32,8 @@ function Classificados() {
         
         setAnuncios(response.data)
         
-    }).catch(err => {
+    })
+    .catch(err => {
         console.log(err.message)
     })  
     
