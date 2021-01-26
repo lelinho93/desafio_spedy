@@ -1,103 +1,59 @@
-import React from "react";
+import React from 'react';
 import { useHistory } from "react-router-dom";
-import styled from "styled-components";
 import { useInput } from "../hooks/useInput";
 import axios from "axios";
 
-
-const Div = styled.div`
-display: flex;
-justify-content: center;
-align-items: center;
-min-height: 49vw;
-max-height: 100%;
-overflow: auto;
-background-color: rgb(240, 240, 240);
-`
-
-const Container = styled.div`
-margin: 1vw;
-display: inline-flex;
-flex-direction: column;
-align-items: center;
-justify-content: space-around;
-border: 1px solid black;
-border-radius: 2vw;
-width: 30%;
-background-color: rgb(204, 204, 204);
-height: 40vw;
-box-shadow: 0px 10px 14px -7px black;
-`
-const InputTitulo = styled.input`
-font-family: 'Courier New', Courier, monospace;
-margin: 1vw;
--webkit-border-radius: 5px; 
--moz-border-radius: 5px; 
-border-radius: 5px; 
-border: 1px solid #848484; 
-outline:0; 
-height: 3vw; 
-width: 25vw;
-padding: 2%;
-`
-const InputDescricao = styled.textarea`
-font-family: 'Courier New', Courier, monospace 100%;
--webkit-border-radius: 5px; 
--moz-border-radius: 5px; 
-border-radius: 5px; 
-border: 1px solid #848484; 
-outline:0; 
-height:50vw; 
-width: 25vw;
-padding: 2%;
-`
-
-const ButtonCadastrar = styled.button`
-box-shadow: 0px 10px 14px -7px #3e7327;
-background:linear-gradient(to bottom, #77b55a 5%, #72b352 100%);
-background-color:#77b55a;
-border-radius:4px;
-border:1px solid #4b8f29;
-display:inline-block;
-cursor:pointer;
-color:#ffffff;
-font-family:Arial;
-font-size:95%;
-font-weight:bold;
-padding:6px 12px;
-text-decoration:none;
-text-shadow:0px 1px 0px #5b8a3c;
-margin: 1vw;
-width: 8vw;
-`
-const ButtonVoltar = styled.button`
-box-shadow: 0px 10px 14px -7px #e67a73;
-background-color:#e4685d;
-border-radius:4px;
-border:1px solid #e67a73;
-display:inline-block;
-cursor:pointer;
-color:#ffffff;
-font-family:Arial;
-font-size: 100%;
-padding:6px 15px;
-text-decoration:none;
-text-shadow:0px 1px 0px #b23e35;
-margin: 1vw;
-width: 8vw;
-`
-const H1 = styled.h1`
-font-size: 3vw;
-text-align: center;
-`
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import TextField from '@material-ui/core/TextField';
+import Link from '@material-ui/core/Link';
+import Grid from '@material-ui/core/Grid';
+import Box from '@material-ui/core/Box';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
+import AssignmentIcon from '@material-ui/icons/Assignment';
 
 
+function Copyright() {
+  return (
+    <Typography variant="body2" color="textSecondary" align="center">
+      {'Copyright © '}
+      <Link color="inherit" href="https://www.linkedin.com/in/wesley-aquino-5880841b9/">
+        Wesley Aquino
+      </Link>{' '}
+      {new Date().getFullYear()}
+      {'.'}
+    </Typography>
+  );
+}
 
-
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    marginTop: theme.spacing(8),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+  },
+  form: {
+    width: '100%',
+    marginTop: theme.spacing(1),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+  },
+}));
 
 function Cadastro() {
 
-const history = useHistory()    
+  const classes = useStyles();
+
+  const history = useHistory()    
 
 const goToClassificados = () => {
     history.push("/")
@@ -111,42 +67,84 @@ const onSubmitForm = () => {
         titulo: titulo,
         descricao: descricao        
     }
+
+    if(!titulo || !descricao) {
+        alert("Preencha todos os campos!")
+    }
     
     axios.post("http://localhost:3003/criarclassificado", body)
     .then(response => {
-        alert("Anúncio cadastrado com sucesso!")
-        history.push("/")
+        alert("Anúncio cadastrado com sucesso!")        
     })    
     .catch(error => {
-        alert("Preencha todos os campos!")
         console.log(error.message)
     })
 }
 
-
-
-
-
-    return(
-        <Div>
-        <Container>
-            <H1>Formulário de cadastro</H1>
-            <InputTitulo
-            type={"text"}
-            placeholder={"Título"}
-            value={titulo}
+  return (
+    <Container component="main" maxWidth="xs">
+      <CssBaseline />
+      <div className={classes.paper}>
+         <Avatar className={classes.avatar}>
+          <AssignmentIcon />
+        </Avatar> 
+        <Typography component="h1" variant="h5">
+          Cadastar anúncio
+        </Typography>
+        <form className={classes.form} noValidate>
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="titulo"
+            label="Título"
+            name="titulo"
+            autoComplete="titulo"
+            autoFocus
             onChange={onChangeTitulo}
-            />
-            <InputDescricao
-            type={"text"}
-            placeholder={"Descrição"}
-            value={descricao}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            multiline
+            fullWidth
+            name="descricao"
+            label="Descrição"
+            type="text"
+            id="descricao"
+            autoComplete="current-password"
             onChange={onChangeDescricao}
-            />
-            <ButtonCadastrar onClick={onSubmitForm}>Cadastrar</ButtonCadastrar>
-            <ButtonVoltar onClick={goToClassificados}>Voltar</ButtonVoltar>
-        </Container>
-        </Div>
-    )
+          />
+          
+          <Button
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+            onClick={onSubmitForm}
+          >
+            Cadastrar
+          </Button >
+          <Grid container>
+            <Grid item xs>
+                <Button
+                fullWidth
+                variant="contained"
+                color="secondary"
+                className={classes.submit}
+                onClick={goToClassificados}>
+                Voltar
+            </Button>
+            </Grid>            
+          </Grid>
+        </form>
+      </div>
+      <Box mt={8}>
+        <Copyright />
+      </Box>
+    </Container>
+  );
 }
 export default Cadastro;

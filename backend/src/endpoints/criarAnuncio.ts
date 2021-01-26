@@ -5,13 +5,9 @@ export default async function criarAnuncio (req: Request, res: Response): Promis
 
     try {
 
-        if( !req.body.titulo ||
-            !req.body.descricao)
-
-     {
-         res.status(400).send("Existe algum campo em branco, preencha corretamente!")
+        if( !req.body.titulo || !req.body.descricao){
+         throw new Error("Existe algum campo em branco, preencha corretamente!")
      }
-
 
         const id = Date.now()
 
