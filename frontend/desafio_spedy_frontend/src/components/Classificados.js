@@ -1,87 +1,138 @@
-import React, { useState, useEffect } from "react";
+import React from 'react';
 import { useHistory } from "react-router-dom";
-import axios from "axios";
+import useAnuncios from "../hooks/useAnuncios";
+import AppBar from '@material-ui/core/AppBar';
+import Button from '@material-ui/core/Button';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Grid from '@material-ui/core/Grid';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
+import Link from '@material-ui/core/Link';
+import SvgIcon from '@material-ui/core/SvgIcon';
 
-import {Container} from "../styled/ClassificadosStyled";
-import {Header} from "../styled/ClassificadosStyled";
-import {Button} from "../styled/ClassificadosStyled";
-import {ContainerAnuncios} from "../styled/ClassificadosStyled";
-import {Footer} from "../styled/ClassificadosStyled";
-import {TextoFooter} from "../styled/ClassificadosStyled";
-import {Logo} from "../styled/ClassificadosStyled"; 
-import logo from "../img/logo.png";
-import {Capa} from "../styled/ClassificadosStyled";
-import anuncioscapa from "../img/anuncios.png";
+function Copyright() {
+  return (
+    <Typography variant="body2" color="textSecondary" align="center">
+      {'Copyright © '}
+      <Link color="inherit" href="https://www.linkedin.com/in/wesley-aquino-5880841b9/">Wesley Aquino</Link>{' '}{new Date().getFullYear()}{'.'}
+    </Typography>
+  );
+}
 
-import { makeStyles } from "@material-ui/core/styles";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import Typography from "@material-ui/core/Typography";
+function HomeIcon(props) {
+  return (
+    <SvgIcon {...props}>
+      <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+    </SvgIcon>
+  );
+}
+
+const useStyles = makeStyles((theme) => ({
+  icon: {
+    marginRight: theme.spacing(2),
+  },
+  heroContent: {
+    backgroundColor: theme.palette.background.paper,
+    padding: theme.spacing(8, 0, 6),
+  },
+  heroButtons: {
+    marginTop: theme.spacing(4),
+  },
+  cardGrid: {
+    paddingTop: theme.spacing(8),
+    paddingBottom: theme.spacing(8),
+  },
+  card: {
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  cardMedia: {
+    paddingTop: '56.25%', // 16:9
+  },
+  cardContent: {
+    flexGrow: 1,
+  },
+  footer: {
+    backgroundColor: theme.palette.background.paper,
+    padding: theme.spacing(6),
+  },
+}));
 
 
-const useStyles = makeStyles({
-    root: {
-      minWidth: 275,
-      maxWidth: 40
-    },
-    bullet: {
-      display: "inline-block",
-      margin: "0 2px",
-      transform: "scale(0.8)"
-    },
-    title: {
-      fontSize: 14
-    },
-    pos: {
-      marginBottom: 12
-    }
-  });
-
-function Classificados() {
-
-    const [anuncios, setAnuncios] = useState([])
-
-    const classes = useStyles();
-    const history = useHistory()
+export default function Classificados() {
+  
+  const classes = useStyles();
+  const history = useHistory()
+  const anuncios = useAnuncios()
 
     const goToCadastro = () => {        
         history.push("/cadastro")
-    };
+      };     
 
-    useEffect(() => {
-    axios.get('http://localhost:3003/classificados').then(response => {        
-    setAnuncios(response.data)        
-    })
-    .catch(err => {
-        console.log(err.message)
-    })}, [])
-    
-    const anuncio = anuncios.sort((a, b) => a.id < b.id ? 1 : - 1).map(anuncio => {
-        return (
-        <Card className={classes.root}>
-        <CardContent>
-          <Typography variant="h5" component="h2">{anuncio.titulo}</Typography>
-          <Typography className={classes.pos} color="textSecondary">{anuncio.data}</Typography>
-          <Typography variant="body2" component="p">{anuncio.descricao}</Typography>
-        </CardContent>
-      </Card>
-        )
-    })
-
-    return(
-        <Container>
-            <Header>
-                <Logo src={logo}></Logo>             
-                <Capa src={anuncioscapa}></Capa>
-                <Button onClick={goToCadastro}>+ Novo classificado</Button>
-            </Header>
-            
-            <ContainerAnuncios>{anuncio}</ContainerAnuncios>
-
-            <Footer>
-                <TextoFooter>{`Exibindo ${anuncios.length} clasificados`}</TextoFooter>
-            </Footer>
+  return (
+    <React.Fragment>
+      <CssBaseline />
+      <AppBar position="relative">
+        <Toolbar>
+        <HomeIcon style={{ fontSize: 40 }} />
+          <Typography variant="h5" color="inherit"></Typography>
+        </Toolbar>
+      </AppBar>
+      <main>
+        {/* Hero unit */}
+        <div className={classes.heroContent}>
+          <Container maxWidth="sm">
+            <Typography component="h1" variant="h4" align="center" color="textPrimary" gutterBottom>
+              SPEDY CLASSIFICADOS
+            </Typography>
+            <Typography variant="h5" align="center" color="textSecondary" paragraph>
+              Aqui você pode anunciar e encontrar de tudo. 
+            </Typography>
+            <div className={classes.heroButtons}>
+              <Grid container spacing={2} justify="center">
+                <Grid item>
+                  <Button onClick={goToCadastro} variant="contained" color="primary">
+                    Fazer um anúncio
+                  </Button>
+                </Grid>
+               </Grid>
+            </div>
+          </Container>
+        </div>
+        <Container className={classes.cardGrid} maxWidth="md">
+          {/* End hero unit */}
+          <Grid container spacing={4}>
+            {anuncios.sort((a, b) => a.id < b.id ? 1 : - 1).map(anuncio => (
+              <Grid item key={anuncio.id} xs={12} sm={6} md={4}>
+                <Card className={classes.card}>                            
+                  <CardContent className={classes.cardContent}>
+                    <Typography gutterBottom variant="h5" component="h2">{anuncio.titulo}</Typography>
+                    <Typography>{anuncio.data}</Typography>
+                      <CardMedia
+                      className={classes.cardMedia}
+                      image="https://source.unsplash.com/random"/>                          
+                    <Typography>{anuncio.descricao}</Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
         </Container>
-    )
+      </main>
+      {/* Footer */}
+      <footer className={classes.footer}>
+        <Typography variant="h6" align="center" gutterBottom>
+          {`Exibindo ${anuncios.length} anúncios`}
+        </Typography>
+        <Copyright />
+      </footer>
+      {/* End footer */}
+    </React.Fragment>
+  );
 }
-export default Classificados;

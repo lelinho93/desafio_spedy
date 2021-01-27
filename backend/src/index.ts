@@ -23,7 +23,6 @@ export const connection = knex({
 const app = express();
 
 app.use((req, res, next) => {
-    //console.log("acessou o middleware")
     res.header("Access-Control-Allow-Origin","*")
     app.use(cors())
     next();

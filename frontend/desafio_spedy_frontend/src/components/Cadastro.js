@@ -100,7 +100,6 @@ const onSubmitForm = () => {
             id="titulo"
             label="Título"
             name="titulo"
-            autoComplete="titulo"
             autoFocus
             onChange={onChangeTitulo}
           />
@@ -114,7 +113,6 @@ const onSubmitForm = () => {
             label="Descrição"
             type="text"
             id="descricao"
-            autoComplete="current-password"
             onChange={onChangeDescricao}
           />
           
