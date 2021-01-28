@@ -14,7 +14,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import AssignmentIcon from '@material-ui/icons/Assignment';
-
+import useAnuncios from '../hooks/useAnuncios';
 
 function Copyright() {
   return (
@@ -74,11 +74,14 @@ const onSubmitForm = () => {
     
     axios.post("http://localhost:3003/criarclassificado", body)
     .then(response => {
-        alert("Anúncio cadastrado com sucesso!")        
-    })    
+        alert("Seu anúncio foi cadastrado com sucesso!")
+        document.location.reload() 
+       
+    })  
     .catch(error => {
         console.log(error.message)
     })
+
 }
 
   return (

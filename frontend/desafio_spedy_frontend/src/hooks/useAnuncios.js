@@ -13,7 +13,7 @@ export default function useAnuncios() {
     })
     .catch(err => {
         console.log(err.message)
-    })}, [])
+    })}, [anuncios])
   
     return anuncios
   }
